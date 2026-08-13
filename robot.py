@@ -1,5 +1,12 @@
 import abc
 
+class InsufficientBatteryError(Exception):
+    def __init__(self, name, required, available):
+        self.name = name
+        self.required = required
+        self.available = available
+        message = f"{name} needs {required}% battery for this task but only has {available}%."
+        super().__init__(message)
 
 class Robot(abc.ABC):
     manufacturer = "Nova Robotics"
@@ -10,6 +17,11 @@ class Robot(abc.ABC):
         self._battery = 0
         self.battery = battery
         Robot.population += 1
+
+    def use_battery(self, amount):
+        if amount > self.battery:
+            raise InsufficientBatteryError(self.name, amount, self.battery)
+        self.battery -= amount
 
     @property
     def battery(self):
