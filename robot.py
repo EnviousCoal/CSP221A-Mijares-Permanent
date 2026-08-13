@@ -1,5 +1,15 @@
 import abc
 import logging
+import functools
+
+def log_action(func):
+    @functools.wraps(func)
+    def wrapper(self, *args, **kwargs):
+        logging.info(f"{self.name}: starting {func.__name__}")
+        result = func(self, *args, **kwargs)
+        logging.info(f"{self.name}: finished {func.__name__}")
+        return result
+    return wrapper
 
 logging.basicConfig(level=logging.INFO)
 def run_task_safely(robot, **kwargs):
@@ -57,10 +67,12 @@ class CleaningRobot(Robot):
     def __init__(self, name, battery=100, dust_capacity=50):
         super().__init__(name, battery)
         self.dust_capacity = dust_capacity
-
+    
+    @log_action
     def perform_task(self):
         self.use_battery(8)
         return f"{self.name} vacuumed the living room."
+       
 
 class DroneRobot(Robot):
     def __init__(self, name, battery=100, max_altitude=120):
@@ -74,4 +86,3 @@ class DroneRobot(Robot):
 def fleet_report(robots):
     for robot in robots:
         print(str(robot))
-        
