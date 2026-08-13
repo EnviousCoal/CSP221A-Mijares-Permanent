@@ -22,7 +22,7 @@ class Robot(abc.ABC):
         if amount > self.battery:
             raise InsufficientBatteryError(self.name, amount, self.battery)
         self.battery -= amount
-
+    
     @property
     def battery(self):
         return self._battery
@@ -40,3 +40,12 @@ class Robot(abc.ABC):
     @abc.abstractmethod
     def perform_task(self):
         pass
+
+class CleaningRobot(Robot):
+    def __init__(self, name, battery=100, dust_capacity=50):
+        super().__init__(name, battery)
+        self.dust_capacity = dust_capacity
+
+    def perform_task(self):
+        self.use_battery(8)
+        return f"{self.name} vacuumed the living room."
