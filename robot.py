@@ -1,5 +1,17 @@
 import abc
+import logging
 
+logging.basicConfig(level=logging.INFO)
+def run_task_safely(robot, **kwargs):
+    try:
+        result = robot.perform_task(**kwargs)
+    except InsufficientBatteryError as e:
+        logging.error(str(e))
+    else:
+        print(result)
+    finally:
+        print(f"{robot.name} battery is now {robot.battery}%.")
+    
 class InsufficientBatteryError(Exception):
     def __init__(self, name, required, available):
         self.name = name
@@ -62,3 +74,4 @@ class DroneRobot(Robot):
 def fleet_report(robots):
     for robot in robots:
         print(str(robot))
+        
