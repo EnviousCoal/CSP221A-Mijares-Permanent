@@ -49,3 +49,16 @@ class CleaningRobot(Robot):
     def perform_task(self):
         self.use_battery(8)
         return f"{self.name} vacuumed the living room."
+
+class DroneRobot(Robot):
+    def __init__(self, name, battery=100, max_altitude=120):
+        super().__init__(name, battery)
+        self.max_altitude = max_altitude
+
+    def perform_task(self):
+        self.use_battery(15)
+        return f"{self.name} completed a delivery flight."
+
+def fleet_report(robots):
+    for robot in robots:
+        print(str(robot))
