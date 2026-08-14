@@ -44,6 +44,10 @@ class Robot(abc.ABC):
         if amount > self.battery:
             raise InsufficientBatteryError(self.name, amount, self.battery)
         self.battery -= amount
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
     
     @property
     def battery(self):
@@ -51,7 +55,7 @@ class Robot(abc.ABC):
 
     @battery.setter
     def battery(self, value):
-        self._battery = max(0, min(100, value))
+        self._battery = value
 
     def __str__(self):
         return f"{self.name} ({self.battery}% battery)"
