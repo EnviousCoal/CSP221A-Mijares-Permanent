@@ -55,7 +55,7 @@ class Robot(abc.ABC):
 
     @battery.setter
     def battery(self, value):
-        self._battery = value
+        self._battery = max(0, min(100, value))
 
     def __str__(self):
         return f"{self.name} ({self.battery}% battery)"
